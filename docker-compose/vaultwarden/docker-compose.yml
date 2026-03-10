@@ -1,0 +1,43 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://vaultwarden.digi-a.org"
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
+      WEBSOCKET_ENABLED: true
+      SIGNUPS_ALLOWED: false
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db/${DB_NAME}?sslmode=disable
+    volumes:
+      - ~/data/vaultwarden/data:/data
+    depends_on:
+      - db
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vaultwarden.entrypoints=https"
+      - "traefik.http.routers.vaultwarden.rule=Host(`vaultwarden.digi-a.org`)"
+      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
+    networks:
+        - proxy
+        - internal
+
+  db:
+    image: postgres:17-alpine
+    container_name: vaultwarden-db
+    restart: unless-stopped
+    volumes:
+      - ~/data/vaultwarden/db/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+    networks:
+      - internal
+
+networks:
+  proxy:
+    external: true
+  internal:
+    external: false

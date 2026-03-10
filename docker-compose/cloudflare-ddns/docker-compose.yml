@@ -1,0 +1,14 @@
+services:
+  cloudflare-ddns:
+    container_name: cloudflare-ddns
+    image: favonia/cloudflare-ddns:latest
+    restart: always
+    read_only: true
+    cap_drop: [all]
+    security_opt: [no-new-privileges:true]
+    environment:
+      - CLOUDFLARE_API_TOKEN=${API_KEY}
+      - DOMAINS=*.digi-a.org
+      - PROXIED=true
+      - TZ=Europe/Dublin
+      - UPDATE_CRON=@every 2m

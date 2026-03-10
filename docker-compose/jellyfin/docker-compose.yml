@@ -1,0 +1,27 @@
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Dublin
+      - JELLYFIN_PublishedServerUrl=https://jellyfin.digi-a.org #optional
+    volumes:
+      - ~/data/jellyfin/config:/config
+      - ~/data/jellyfin/tvshows/:/data/tvshows
+      - ~/data/jellyfin/movies/:/data/movies
+      - ~/data/jellyfin/anime/:/data/anime
+    ports:
+      - 8096:8096
+    restart: unless-stopped
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.entrypoints=https"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.digi-a.org`)"
+    networks:
+        - proxy
+networks:
+  proxy:
+    external: true

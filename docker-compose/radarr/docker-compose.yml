@@ -1,0 +1,25 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Dublin
+    volumes:
+      - ~/data/radarr/config:/config
+      - ~/data/jellyfin/movies:/movies #optional
+      - ~/data/qbittorrent/downloads:/downloads #optional
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.entrypoints=https"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.digi-a.org`)"
+    networks:
+        - proxy
+networks:
+  proxy:
+    external: true

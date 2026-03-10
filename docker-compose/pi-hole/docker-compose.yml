@@ -1,0 +1,28 @@
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    environment:
+      FTLCONF_webserver_api_password: "${PIHOLE_PASSWORD}"
+      FTLCONF_dns_listeningMode: all
+    volumes:
+      - ~/data/pi-hole/etc-pihole:/etc/pihole
+      - ~/data/pi-hole/etc-dnsmasq.d:/etc/dnsmasq.d
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pihole.entrypoints=https"
+      - "traefik.http.routers.pihole.rule=Host(`pihole.digi-a.org`)"
+      - "traefik.http.services.pihole.loadbalancer.server.port=80"
+      - "traefik.http.routers.pihole.middlewares=pihole-admin-redirect"
+      - "traefik.http.middlewares.pihole-admin-redirect.redirectregex.regex=^https://pihole\\.digi-a\\.org/?$$"
+      - "traefik.http.middlewares.pihole-admin-redirect.redirectregex.replacement=https://pihole.digi-a.org/admin"
+      - "traefik.http.middlewares.pihole-admin-redirect.redirectregex.permanent=true"
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true

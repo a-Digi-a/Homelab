@@ -1,0 +1,28 @@
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - ~/data/qbittorrent/config:/config
+      - ~/data/qbittorrent/downloads:/downloads #optional
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.entrypoints=https"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.digi-a.org`)"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+    networks:
+        - proxy
+networks:
+  proxy:
+    external: true
