@@ -18,7 +18,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.sonarr.entrypoints=https"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.digi-a.org`)"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.local.digi-a.org`)"
     networks:
         - proxy
 networks:

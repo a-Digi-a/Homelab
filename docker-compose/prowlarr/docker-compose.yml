@@ -15,7 +15,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.prowlarr.entrypoints=https"
-      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.digi-a.org`)"
+      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.local.digi-a.org`)"
     networks:
         - proxy
 networks:

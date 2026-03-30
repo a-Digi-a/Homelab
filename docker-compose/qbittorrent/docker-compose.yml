@@ -19,7 +19,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.qbittorrent.entrypoints=https"
-      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.digi-a.org`)"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.local.digi-a.org`)"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
     networks:
         - proxy
