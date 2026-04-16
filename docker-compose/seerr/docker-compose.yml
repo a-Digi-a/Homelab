@@ -21,7 +21,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.seerr.entrypoints=https"
-      - "traefik.http.routers.seerr.rule=Host(`seerr.digi-a.org`)"
+      - "traefik.http.routers.seerr.rule=Host(`seerr.local.digi-a.org`)"
     networks:
         - proxy
 networks:
